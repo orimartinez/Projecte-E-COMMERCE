@@ -6,6 +6,10 @@ public class GestioClients {
     private String DNI;
     private String telefon;
 
+    public GestioClients() {
+        
+    }
+
     // 2. Constructor
     public GestioClients(String nom, String email, String DNI, String telefon) {
         this.nom = nom;
