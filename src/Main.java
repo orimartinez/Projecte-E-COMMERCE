@@ -54,7 +54,7 @@ public class Main {
         }
     }
 
-    //Funció per llegir nombres enters
+    // Funció per llegir nombres enters
     public int llegirEnter() {
         int nombre = 0;
 
@@ -66,8 +66,20 @@ public class Main {
         }
         return nombre;
     }
-    
-    //Funció per sortir del programa
+
+    // Funció per llegir text
+    public String llegirString() {
+        String text = " ";
+        try {
+            text = sc.next();
+        } catch (InputMismatchException e) {
+            System.out.println("Introdueix un text");
+            sc.next();
+        }
+        return text;
+    }
+
+    // Funció per sortir del programa
     public boolean sortirMenu() {
         return true;
     }
