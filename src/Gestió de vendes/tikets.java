@@ -10,12 +10,13 @@ public class tikets {
     private double totalBase;
     private double totalIva;
     private double totalFinal;
-    private List<LiniaFactura> linies;
+    private ArrayList<lineaFactura> linies;
 
     public tikets(int id, LocalDate dateCompra, String deniClient, double totalBase, double totalIva,
             double totalFinal) {
+        this.id = id;
         this.dataCompra = LocalDate.now(); 
-        this.dniClient = dniClient;
+        this.dniClient = deniClient; 
         this.linies = new ArrayList<>();
         this.totalBase = 0;
         this.totalIva = 0;
@@ -70,15 +71,15 @@ public class tikets {
         this.totalFinal = totalFinal;
     }
 
-    public List<LiniaFactura> getLinies() {
+    public ArrayList<lineaFactura> getLinies() {
         return linies;
     }
 
-    public void setLinies(List<LiniaFactura> linies) {
+    public void setLinies(ArrayList<lineaFactura> linies) {
         this.linies = linies;
     }
 
-    public void afegirLinia(LiniaFactura linia) {
+    public void afegirLinia(lineaFactura linia) {
         this.linies.add(linia);
         recalcularTotals();
     }
@@ -89,13 +90,12 @@ public class tikets {
         this.totalFinal = 0;
 
         for (int i = 0; i < linies.size(); i++) {
-            LiniaFactura liniaActual = linies.get(i);
+            lineaFactura liniaActual = linies.get(i);
             this.totalBase = this.totalBase + liniaActual.getPreuBase();
             double ivaAquestaLinia = liniaActual.getPreuBase() * (liniaActual.getIva() / 100.0);
             this.totalIva = this.totalIva + ivaAquestaLinia;
         }
         this.totalFinal = this.totalBase + this.totalIva;
-
     }
 
     @Override
