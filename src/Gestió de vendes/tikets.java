@@ -18,11 +18,12 @@ public class tikets {
         this.dataCompra = LocalDate.now(); 
         this.dniClient = deniClient; 
         this.linies = new ArrayList<>();
-        this.totalBase = 0;
+        this.totalBase = 0; 
         this.totalIva = 0;
         this.totalFinal = 0;
     }
 
+    
     public int getId() {
         return id;
     }

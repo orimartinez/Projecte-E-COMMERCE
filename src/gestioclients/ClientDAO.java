@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import persistence.ConnexioBD;
 
-public class ClientDAO { 
+public class ClientDAO {
 
     // 1. ALTA DE CLIENT
-    public boolean afegirClient(GestioClients client) { 
+    public boolean afegirClient(GestioClients client) {
         String sql = "INSERT INTO clients (DNI, nom, email, telefon) VALUES (?, ?, ?, ?)";
-        
+
         try (Connection conn = ConnexioBD.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, client.getDNI());
             pstmt.setString(2, client.getNom());
@@ -34,12 +34,12 @@ public class ClientDAO {
     // 2. BAIXA DE CLIENT
     public boolean esborrarClient(String dni) {
         String sql = "DELETE FROM clients WHERE DNI = ?";
-        
+
         try (Connection conn = ConnexioBD.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, dni);
-            
+
             int filesAfectades = pstmt.executeUpdate();
             return filesAfectades > 0;
 
@@ -52,9 +52,9 @@ public class ClientDAO {
     // 3. MODIFICACIÓ DE CLIENT
     public boolean modificarClient(GestioClients client) {
         String sql = "UPDATE clients SET nom = ?, email = ?, telefon = ? WHERE DNI = ?";
-        
+
         try (Connection conn = ConnexioBD.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, client.getNom());
             pstmt.setString(2, client.getEmail());
@@ -71,21 +71,20 @@ public class ClientDAO {
     }
 
     // 4. CONSULTA
-    public List<GestioClients> obtenirTotsElsClients() { 
+    public List<GestioClients> obtenirTotsElsClients() {
         List<GestioClients> llistaClients = new ArrayList<>();
         String sql = "SELECT * FROM clients";
 
         try (Connection conn = ConnexioBD.conectar();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 GestioClients c = new GestioClients(
-                    rs.getString("nom"),
-                    rs.getString("email"),
-                    rs.getString("DNI"),
-                    rs.getString("telefon")
-                );
+                        rs.getString("nom"),
+                        rs.getString("email"),
+                        rs.getString("DNI"),
+                        rs.getString("telefon"));
                 llistaClients.add(c);
             }
 
