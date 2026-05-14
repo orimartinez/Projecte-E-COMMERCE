@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tikets {
+public class tikets{
 
     private int id;
     private LocalDate dataCompra;
@@ -10,20 +10,19 @@ public class tikets {
     private double totalBase;
     private double totalIva;
     private double totalFinal;
-    private ArrayList<lineaFactura> linies;
+    private ArrayList<LineaFactura> linies;
 
-    public tikets(int id, LocalDate dateCompra, String deniClient, double totalBase, double totalIva,
+    public tikets(int id, String deniClient, double totalBase, double totalIva,
             double totalFinal) {
         this.id = id;
-        this.dataCompra = LocalDate.now(); 
-        this.dniClient = deniClient; 
+        this.dataCompra = LocalDate.now();
+        this.dniClient = deniClient;
         this.linies = new ArrayList<>();
-        this.totalBase = 0; 
+        this.totalBase = 0;
         this.totalIva = 0;
         this.totalFinal = 0;
     }
 
-    
     public int getId() {
         return id;
     }
@@ -72,15 +71,11 @@ public class tikets {
         this.totalFinal = totalFinal;
     }
 
-    public ArrayList<lineaFactura> getLinies() {
+    public ArrayList<LineaFactura> getLinies() {
         return linies;
     }
 
-    public void setLinies(ArrayList<lineaFactura> linies) {
-        this.linies = linies;
-    }
-
-    public void afegirLinia(lineaFactura linia) {
+    public void afegirLinia(LineaFactura linia) { 
         this.linies.add(linia);
         recalcularTotals();
     }
@@ -92,7 +87,7 @@ public class tikets {
         this.totalFinal = 0;
 
         for (int i = 0; i < linies.size(); i++) {
-            lineaFactura liniaActual = linies.get(i);
+            LineaFactura liniaActual = linies.get(i); // Corregido: lineaFactura con l minúscula
             this.totalBase = this.totalBase + liniaActual.getPreuBase(); // Suma del preu de linea del total del tiquet
             double ivaAquestaLinia = liniaActual.getPreuBase() * (liniaActual.getIva() / 100.0);
             this.totalIva = this.totalIva + ivaAquestaLinia;

@@ -1,4 +1,4 @@
-public class lineaFactura {
+public class LineaFactura {
 
     private int id_tiquet;
     private int id_article;
@@ -7,7 +7,7 @@ public class lineaFactura {
     private double iva;
     private double preu_final;
 
-    public lineaFactura(int id_tiquet, int id_article, int quantitat, double preu_base, double iva) {
+    public LineaFactura(int id_tiquet, int id_article, int quantitat, double preu_base, double iva) {
         this.id_tiquet = id_tiquet;
         this.id_article = id_article;
         this.quantitat = quantitat;
@@ -54,10 +54,12 @@ public class lineaFactura {
 
     public void setPreu_base(double preu_base) {
         this.preu_base = preu_base;
+        this.preu_final = this.preu_base + (this.preu_base * (this.iva / 100.0));
     }
 
     public void setIva(double iva) {
         this.iva = iva;
+        this.preu_final = this.preu_base + (this.preu_base * (this.iva / 100.0));
     }
 
     public void setPreu_final(double preu_final) {
