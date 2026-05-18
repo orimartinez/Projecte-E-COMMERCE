@@ -87,7 +87,7 @@ public class tikets{
         this.totalFinal = 0;
 
         for (int i = 0; i < linies.size(); i++) {
-            LineaFactura liniaActual = linies.get(i); // Corregido: lineaFactura con l minúscula
+            LineaFactura liniaActual = linies.get(i); 
             this.totalBase = this.totalBase + liniaActual.getPreuBase(); // Suma del preu de linea del total del tiquet
             double ivaAquestaLinia = liniaActual.getPreuBase() * (liniaActual.getIva() / 100.0);
             this.totalIva = this.totalIva + ivaAquestaLinia;
