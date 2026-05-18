@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tikets{
+public class tikets {
 
     private int id;
     private LocalDate dataCompra;
@@ -75,7 +75,7 @@ public class tikets{
         return linies;
     }
 
-    public void afegirLinia(LineaFactura linia) { 
+    public void afegirLinia(LineaFactura linia) {
         this.linies.add(linia);
         recalcularTotals();
     }
@@ -87,7 +87,7 @@ public class tikets{
         this.totalFinal = 0;
 
         for (int i = 0; i < linies.size(); i++) {
-            LineaFactura liniaActual = linies.get(i); 
+            LineaFactura liniaActual = linies.get(i);
             this.totalBase = this.totalBase + liniaActual.getPreuBase(); // Suma del preu de linea del total del tiquet
             double ivaAquestaLinia = liniaActual.getPreuBase() * (liniaActual.getIva() / 100.0);
             this.totalIva = this.totalIva + ivaAquestaLinia;
@@ -106,5 +106,34 @@ public class tikets{
                 "TOTAL FINAL: " + this.totalFinal + "€";
 
         return resum;
+    }
+
+    public void imprimirTiket() {
+        System.out.println("===================================");
+        System.out.println("         TIQUET DE COMPRA          ");
+        System.out.println("===================================");
+        System.out.println("TIQUET NÚM: " + this.id);
+        System.out.println("DATA: " + this.dataCompra);
+        System.out.println("CLIENT (DNI): " + this.dniClient);
+        System.out.println("-----------------------------------");
+        System.out.println("PRODUCTES: ");
+
+        // bucle per mostrar linea per liena els diferents prodcutes
+        for (int i = 0; i < linies.size(); i++) {
+            LineaFactura liniaProductes = linies.get(i);
+
+            System.out.println("- Article ID: " + liniaProductes.getId_article() +
+                    " | Quantitat: " + liniaProductes.getQuantitat() +
+                    " | Preu Base: " + liniaProductes.getPreuBase() + "€" +
+                    " | IVA: " + liniaProductes.getIva() + "%" +
+                    " | Final: " + liniaProductes.getPreuFinal() + "€");
+        }
+
+        System.out.println("-----------------------------------");
+        System.out.println("TOTAL BASE: " + this.totalBase + "€");
+        System.out.println("TOTAL IVA: " + this.totalIva + "€");
+        System.out.println("===================================");
+        System.out.println("TOTAL A PAGAR: " + this.totalFinal + "€");
+        System.out.println("===================================");
     }
 }
