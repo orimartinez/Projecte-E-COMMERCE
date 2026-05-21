@@ -45,7 +45,7 @@ public abstract class Article {
         return nom;
     }
 
-    public String familia() {
+    public String getFamilia() {
         return familia;
     }
 
