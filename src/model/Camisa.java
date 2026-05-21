@@ -10,7 +10,6 @@ public class Camisa extends Article {
         this.ampladaPit = ampladaPit;
     }
 
-    // Novos Getters necessários para a Base de Dados
     public int getTallaColl() {
         return tallaColl;
     }
@@ -21,6 +20,6 @@ public class Camisa extends Article {
 
     @Override
     public String toString(){
-        return "Camisa: [ID: " + id + ", nom: " + nom + ", coll: " + tallaColl + ", pit: " + ampladaPit + ", stock: " + stock + "]"; 
+        return "Camisa: [ID: " + getId() + ", nom: " + getNom() + ", coll: " + tallaColl + ", pit: " + ampladaPit + ", stock: " + getStock() + "]"; 
     }
 }
