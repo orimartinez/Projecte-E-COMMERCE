@@ -1,7 +1,8 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\ori41\\Downloads\\Base de dades\\JJSON\\exemplejjson\\lib\\mysql-connector-j-8.0.32.jar"
+        "c:\\Users\\ori41\\Downloads\\Base de dades\\JJSON\\exemplejjson\\lib\\mysql-connector-j-8.0.32.jar",
+        "c:\\Users\\ori41\\Downloads\\json-simple-1.1.1.jar"
     ],
     "snyk.advanced.autoSelectOrganization": true
 }
