@@ -34,6 +34,7 @@ public class Main {
             System.out.println("7. Càlcul de beneficis totals");
             System.out.println("8. Recompra automàtica d'articles");
             System.out.println("0. Sortir del menú");
+            System.out.print("Seleciona una opció: ");
 
             int opcioMenuPrincipal = llegirEnter();
 

@@ -49,9 +49,11 @@ public class GestioBD {
         try (Connection conn = ConnexioBD.conectar();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Re-ordenem els paràmetres perquè l'ID va al final del SET (WHERE id = ?)
+            // Assignem els paràmetres segons l'ordre exacte de la consulta UPDATE
             ps.setString(1, art.getNom());
-            ps.setString(2, art instanceof Camisa ? "Camises" : "Pantalons");
+            
+            ps.setString(2, art instanceof Camisa ? "camisa" : "pantaló");
+            
             ps.setDouble(3, art.getPreu_base());
             ps.setInt(4, art.getIva());
             ps.setInt(5, art.getStock());
@@ -69,6 +71,8 @@ public class GestioBD {
                 ps.setInt(8, p.getLlargadaCamal());
                 ps.setInt(9, p.getTallaCintura());
             }
+            
+            // L'ID és el darrer paràmetre que correspon al WHERE id = ?
             ps.setInt(10, art.getId());
 
             return ps.executeUpdate();
@@ -83,7 +87,10 @@ public class GestioBD {
     private void configurarPreparedStatement(PreparedStatement ps, Article art) throws SQLException {
         ps.setInt(1, art.getId());
         ps.setString(2, art.getNom());
-        ps.setString(3, art instanceof Camisa ? "Camises" : "Pantalons");
+        
+        // TRADUCCIÓ: Forcem el text en minúscula i singular exigit per la regla CHECK 'articles_chk_3'
+        ps.setString(3, art instanceof Camisa ? "camisa" : "pantaló");
+        
         ps.setDouble(4, art.getPreu_base());
         ps.setInt(5, art.getIva());
         ps.setInt(6, art.getStock());
