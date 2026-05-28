@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import persistence.ConnexioBD;
 
-public class ClientDAO { 
+public class ClientDAO {
 
-    // 1. ALTA DE CLIENT
-    public boolean afegirClient(GestioClients client) { 
+    public boolean afegirClient(GestioClients client) {
         String sql = "INSERT INTO clients (DNI, nom, email, telefon) VALUES (?, ?, ?, ?)";
-        
+
         try (Connection conn = ConnexioBD.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -22,37 +21,35 @@ public class ClientDAO {
             pstmt.setString(3, client.getEmail());
             pstmt.setString(4, client.getTelefon());
 
-            int filesAfectades = pstmt.executeUpdate();
-            return filesAfectades > 0;
+            int files = pstmt.executeUpdate();
+            return files > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error a l'afegir el client a la BD: " + e.getMessage());
+            System.out.println("Error al afegir: " + e.getMessage());
             return false;
         }
     }
 
-    // 2. BAIXA DE CLIENT
     public boolean esborrarClient(String dni) {
         String sql = "DELETE FROM clients WHERE DNI = ?";
-        
+
         try (Connection conn = ConnexioBD.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, dni);
-            
-            int filesAfectades = pstmt.executeUpdate();
-            return filesAfectades > 0;
+
+            int files = pstmt.executeUpdate();
+            return files > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error a l'esborrar el client: " + e.getMessage());
+            System.out.println("Error al esborrar.");
             return false;
         }
     }
 
-    // 3. MODIFICACIÓ DE CLIENT
     public boolean modificarClient(GestioClients client) {
         String sql = "UPDATE clients SET nom = ?, email = ?, telefon = ? WHERE DNI = ?";
-        
+
         try (Connection conn = ConnexioBD.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -61,17 +58,16 @@ public class ClientDAO {
             pstmt.setString(3, client.getTelefon());
             pstmt.setString(4, client.getDNI());
 
-            int filesAfectades = pstmt.executeUpdate();
-            return filesAfectades > 0;
+            int files = pstmt.executeUpdate();
+            return files > 0;
 
         } catch (SQLException e) {
-            System.out.println("Error al modificar el client: " + e.getMessage());
+            System.out.println("Error al modificar.");
             return false;
         }
     }
 
-    // 4. CONSULTA
-    public List<GestioClients> obtenirTotsElsClients() { 
+    public List<GestioClients> obtenirTotsElsClients() {
         List<GestioClients> llistaClients = new ArrayList<>();
         String sql = "SELECT * FROM clients";
 
@@ -81,17 +77,53 @@ public class ClientDAO {
 
             while (rs.next()) {
                 GestioClients c = new GestioClients(
-                    rs.getString("nom"),
-                    rs.getString("email"),
-                    rs.getString("DNI"),
-                    rs.getString("telefon")
+                        rs.getString("nom"),
+                        rs.getString("email"),
+                        rs.getString("DNI"),
+                        rs.getString("telefon")
                 );
                 llistaClients.add(c);
             }
 
         } catch (SQLException e) {
-            System.out.println("Error al consultar clients: " + e.getMessage());
+            System.out.println("Error al consultar.");
         }
         return llistaClients;
+    }
+
+    public void consultarVendesPerClient(String dniConsultar) {
+        String sql = "SELECT c.dni, c.nom, COUNT(t.id) AS nombre_tiquets, " +
+                     "COALESCE(SUM(t.total_final), 0) AS despesa_total " +
+                     "FROM clients c " +
+                     "LEFT JOIN tiquets t ON c.dni = t.dni_client " +
+                     "WHERE c.dni = ? " +
+                     "GROUP BY c.dni, c.nom";
+
+        try (Connection conn = ConnexioBD.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, dniConsultar);
+
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                String dni = rs.getString("dni");
+                String nom = rs.getString("nom");
+                int numTiquets = rs.getInt("nombre_tiquets");
+                double totalDespesa = rs.getDouble("despesa_total");
+
+                System.out.println("\n--- VENDES DEL CLIENT ---");
+                System.out.println("DNI: " + dni);
+                System.out.println("Nom: " + nom);
+                System.out.println("Tiquets totals: " + numTiquets);
+                System.out.println("Diners gastats: " + totalDespesa + " euros");
+                System.out.println("-------------------------");
+            } else {
+                System.out.println("\nAquest client no existeix.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error a la base de dades.");
+        }
     }
 }
