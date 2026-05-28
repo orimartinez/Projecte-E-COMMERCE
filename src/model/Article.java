@@ -30,6 +30,7 @@ public abstract class Article {
 
         }
     }
+    
 
     public void setStock(int stock) {
         if (stock >= 0) {

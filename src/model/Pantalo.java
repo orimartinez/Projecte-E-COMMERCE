@@ -24,5 +24,10 @@ public class Pantalo extends Article {
     public int getTallaCintura() {
         return this.tallaCintura;
     }
+    
+    public double getPreuCost() {
+        // Fórmula: preu_base * 0,30 + llargada_camal * 0,2
+        return (this.getPreu_base() * 0.30) + (this.getLlargadaCamal() * 0.2);
+    }
+    
 }
-

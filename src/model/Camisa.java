@@ -24,5 +24,10 @@ public class Camisa extends Article {
     public int getAmpladaPit() {
         return this.ampladaPit;
     }
+    
+    public double getPreuCost() {
+    // Fórmula: preu_base * 0,35 + talla_coll * 0,3
+    return (this.getPreu_base() * 0.35) + (this.getTallaColl() * 0.3);
+}
 }
 
