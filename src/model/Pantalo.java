@@ -25,3 +25,4 @@ public class Pantalo extends Article {
         return this.tallaCintura;
     }
 }
+

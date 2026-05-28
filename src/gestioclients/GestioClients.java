@@ -1,16 +1,14 @@
 package gestioclients;
+
 public class GestioClients {
-    // 1. Atributos
+    
+    // Variables
     private String nom;
     private String email;
     private String DNI;
     private String telefon;
 
-    public GestioClients() {
-        
-    }
-
-    // 2. Constructor
+    // Constructor
     public GestioClients(String nom, String email, String DNI, String telefon) {
         this.nom = nom;
         this.email = email;
@@ -18,7 +16,7 @@ public class GestioClients {
         this.telefon = telefon;
     }
 
-    // 4. Getters y Setters
+    // Getters i Setters
     public String getNom() {
         return nom;
     }
@@ -51,11 +49,8 @@ public class GestioClients {
         this.telefon = telefon;
     }
 
-    // 5. Método toString para poder imprimir el cliente
     @Override
     public String toString() {
         return "Client [DNI=" + DNI + ", Nom=" + nom + ", Email=" + email + ", Telèfon=" + telefon + "]";
     }
 }
-
-

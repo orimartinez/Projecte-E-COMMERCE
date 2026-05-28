@@ -49,8 +49,25 @@ public class Main {
                 case 4:
                     break;
                 case 5:
+                    System.out.print("Introdueix el NIF/DNI del client a consultar: ");
+                    sc.nextLine(); // Esto limpia el scanner para que os deje escribir el texto sin saltárselo
+                    String dniUser = sc.nextLine();
+                    
+                    // Creamos el objeto del DAO (vuestra estructura estándar)
+                    gestioclients.ClientDAO daoClients = new gesticlients.ClientDAO();
+                    
+                    // Usamos el método que acabamos de poner arriba
+                    daoClients.consultarVendesPerClient(dniUser);
                     break;
                 case 6:
+                    System.out.print("Introdueix el codi (ID) de l'article a consultar: ");
+                    int idUser = llegirEnter(); // Usamos vuestra propia función de leer números
+
+                    // Creamos el objeto del DAO de artículos siguiendo vuestra estructura estándar
+                    model.ArticleDAO daoArticles = new model.ArticleDAO();
+
+                    // Llamamos al método que busca y muestra los datos
+                    daoArticles.consultarVendesPerArticle(idUser);
                     break;
                 case 7:
                     break;
@@ -71,7 +88,7 @@ public class Main {
 
         // 1. Llegim el fitxer de text JSON utilitzant el gestor global
         ArrayList<Article> articlesImportats = gestorJSON.llegirArticlesJSON("data/PE11_articles.json");
-        
+
         // Validació per si hi hagués problemes amb el fitxer o la ruta
         if (articlesImportats == null || articlesImportats.isEmpty()) {
             System.out.println("No s'ha pogut carregar cap article del JSON (fitxer buit o inexistent).");

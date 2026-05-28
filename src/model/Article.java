@@ -24,8 +24,10 @@ public abstract class Article {
         if (iva >= 4 && iva <= 21) {
             this.iva = iva;
         } else {
+
             this.iva = 21; // En cas de que no posi un valor "correcte" es posarà el valor d'IVA per
                            // defecte (21%)
+
         }
     }
 
@@ -46,6 +48,7 @@ public abstract class Article {
     }
 
     public String getFamilia() {
+
         return familia;
     }
 
