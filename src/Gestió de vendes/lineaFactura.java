@@ -16,6 +16,11 @@ public class LineaFactura {
         this.preu_final = preu_base + (preu_base * (iva / 100.0));
     }
 
+    private void recalcularPreuFinal() {
+        double totalBaseLinia = this.preu_base * this.quantitat;
+        this.preu_final = totalBaseLinia + (totalBaseLinia * (this.iva / 100.0));
+    }
+
     public double getPreuBase() {
         return preu_base;
     }

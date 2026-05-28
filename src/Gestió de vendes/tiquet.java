@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tiquet {
+public class Tiquet {
 
     private int id;
     private LocalDate dataCompra;
@@ -12,7 +12,7 @@ public class tiquet {
     private double totalFinal;
     private ArrayList<LineaFactura> linies;
 
-    public tiquet(int id, String deniClient, double totalBase, double totalIva,
+    public Tiquet(int id, String deniClient, double totalBase, double totalIva,
             double totalFinal) {
         this.id = id;
         this.dataCompra = LocalDate.now();
