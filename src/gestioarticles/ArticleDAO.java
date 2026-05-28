@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import model.Article;
 import model.Camisa;
@@ -12,10 +13,42 @@ import persistence.ConnexioBD;
 
 public class ArticleDAO {
 
-    // =========================================================================
-    // MÉTODOS IMPRESCINDIBLES PARA TU TPV (PUNTO 6)
-    // =========================================================================
+    public void consultarVendesPerArticle(int idArticleConsultar) {
+        String sql = "SELECT a.id, a.nom, COALESCE(SUM(lf.quantitat), 0) AS quantitat_total " +
+                     "FROM articles a " +
+                     "LEFT JOIN linies_factura lf ON a.id = lf.id_article " +
+                     "WHERE a.id = ? " +
+                     "GROUP BY a.id, a.nom";
 
+        try (Connection conn = ConnexioBD.conectar();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idArticleConsultar);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nom = rs.getString("nom");
+                    int quantitatTotal = rs.getInt("quantitat_total");
+
+                    System.out.println("\n==================================================");
+                    System.out.println("   CONSULTA DE VENDES PER ARTICLE");
+                    System.out.println("==================================================");
+                    System.out.println("Codi de l'article: " + id);
+                    System.out.println("Nom de l'article: " + nom);
+                    System.out.println("--------------------------------------------------");
+                    System.out.println("Quantitat total venuda: " + quantitatTotal + " unitats");
+                    System.out.println("==================================================\n");
+                } else {
+                    System.out.println("\n[!] L'article amb codi '" + idArticleConsultar + "' no existeix a la base de dades.\n");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error en executar la consulta d'articles: " + e.getMessage());
+        }
+    }
+    
     public Article obtenirArticlePerId(int idArticle) {
         String sql = "SELECT * FROM articles WHERE id = ?";
         
@@ -23,31 +56,30 @@ public class ArticleDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, idArticle);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    String familia = rs.getString("familia");
-                    
-                    int id = rs.getInt("id");
-                    String nom = rs.getString("nom");
-                    double preuBase = rs.getDouble("preu_base");
-                    int iva = rs.getInt("IVA");
-                    int stock = rs.getInt("stock");
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                String familia = rs.getString("familia");
+                int id = rs.getInt("id");
+                String nom = rs.getString("nom");
+                double preuBase = rs.getDouble("preu_base");
+                int iva = rs.getInt("IVA");
+                int stock = rs.getInt("stock");
 
-                    if (familia.equalsIgnoreCase("Camises")) {
-                        int tallaColl = rs.getInt("talla_coll");
-                        int ampladaPit = rs.getInt("amplada_pit");
-                        return new Camisa(id, nom, preuBase, iva, stock, tallaColl, ampladaPit);
-                    } else if (familia.equalsIgnoreCase("Pantalons")) {
-                        int llargadaCamal = rs.getInt("llargada_camal");
-                        int tallaCintura = rs.getInt("talla_cintura");
-                        return new Pantalo(id, nom, preuBase, iva, stock, llargadaCamal, tallaCintura);
-                    }
+                if (familia.equals("Camises")) {
+                    int tallaColl = rs.getInt("talla_coll");
+                    int ampladaPit = rs.getInt("amplada_pit");
+                    return new Camisa(id, nom, preuBase, iva, stock, tallaColl, ampladaPit);
+                } else if (familia.equals("Pantalons")) {
+                    int llargadaCamal = rs.getInt("llargada_camal");
+                    int tallaCintura = rs.getInt("talla_cintura");
+                    return new Pantalo(id, nom, preuBase, iva, stock, llargadaCamal, tallaCintura);
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al buscar l'article per ID: " + e.getMessage());
+            System.out.println("Error BD: " + e.getMessage());
         }
-        return null;
+        return null; 
     }
 
     public boolean restarStock(int idArticle, int quantitatVenuda) {
@@ -60,21 +92,17 @@ public class ArticleDAO {
             pstmt.setInt(2, idArticle);
             pstmt.setInt(3, quantitatVenuda); 
 
-            return pstmt.executeUpdate() > 0;
+            int files = pstmt.executeUpdate();
+            return files > 0;
             
         } catch (SQLException e) {
-            System.out.println("Error al actualizar l'stock: " + e.getMessage());
+            System.out.println("Error al restar stock.");
             return false;
         }
     }
 
-    // =========================================================================
-    // MÉTODOS DEL CRUD DE ARTÍCULOS (PARA TU COMPAÑERO)
-    // =========================================================================
-
     public boolean afegirArticle(Article article) {
-        String sql = "INSERT INTO articles (id, nom, familia, preu_base, IVA, stock, talla_coll, amplada_pit, llargada_camal, talla_cintura) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO articles (id, nom, familia, preu_base, IVA, stock, talla_coll, amplada_pit, llargada_camal, talla_cintura) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = ConnexioBD.conectar();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -90,20 +118,21 @@ public class ArticleDAO {
                 Camisa c = (Camisa) article;
                 pstmt.setInt(7, c.getTallaColl());
                 pstmt.setInt(8, c.getAmpladaPit());
-                pstmt.setNull(9, java.sql.Types.INTEGER);
-                pstmt.setNull(10, java.sql.Types.INTEGER);
+                pstmt.setNull(9, Types.INTEGER);
+                pstmt.setNull(10, Types.INTEGER);
             } else if (article instanceof Pantalo) {
                 Pantalo p = (Pantalo) article;
-                pstmt.setNull(7, java.sql.Types.INTEGER);
-                pstmt.setNull(8, java.sql.Types.INTEGER);
+                pstmt.setNull(7, Types.INTEGER);
+                pstmt.setNull(8, Types.INTEGER);
                 pstmt.setInt(9, p.getLlargadaCamal());
                 pstmt.setInt(10, p.getTallaCintura());
             }
 
-            return pstmt.executeUpdate() > 0;
+            int files = pstmt.executeUpdate();
+            return files > 0;
             
         } catch (SQLException e) {
-            System.out.println("Error a l'afegir l'article: " + e.getMessage());
+            System.out.println("Error al afegir article.");
             return false;
         }
     }
@@ -115,10 +144,11 @@ public class ArticleDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, idArticle);
-            return pstmt.executeUpdate() > 0;
+            int files = pstmt.executeUpdate();
+            return files > 0;
             
         } catch (SQLException e) {
-            System.out.println("Error a l'esborrar l'article: " + e.getMessage());
+            System.out.println("Error al esborrar.");
             return false;
         }
     }
