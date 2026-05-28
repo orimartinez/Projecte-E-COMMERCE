@@ -14,6 +14,7 @@ public class LineaFactura {
         this.preu_base = preu_base;
         this.iva = iva;
         this.preu_final = preu_base + (preu_base * (iva / 100.0));
+        recalcularPreuFinal();
     }
 
     private void recalcularPreuFinal() {
@@ -51,6 +52,7 @@ public class LineaFactura {
 
     public void setQuantitat(int quantitat) {
         this.quantitat = quantitat;
+        recalcularPreuFinal();
     }
 
     public double getPreuFinal() {
@@ -59,12 +61,12 @@ public class LineaFactura {
 
     public void setPreu_base(double preu_base) {
         this.preu_base = preu_base;
-        this.preu_final = this.preu_base + (this.preu_base * (this.iva / 100.0));
+        recalcularPreuFinal();
     }
 
     public void setIva(double iva) {
         this.iva = iva;
-        this.preu_final = this.preu_base + (this.preu_base * (this.iva / 100.0));
+        recalcularPreuFinal();
     }
 
     public void setPreu_final(double preu_final) {
